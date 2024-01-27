@@ -3,14 +3,14 @@ from django.db.models import Q, Case, When, IntegerField, Value
 from rest_framework import generics as rest_generics
 
 from common import pagination as common_pagination
-from search import (models as search_models, serializers as search_serializers)
+from video import (models as video_models, serializers as video_serializers)
 
 class VideoListView(rest_generics.ListAPIView):
     """
     API to list videos
     """
-    queryset = search_models.Video.objects.order_by('-published_at')
-    serializer_class = search_serializers.VideoSerializer
+    queryset = video_models.Video.objects.order_by('-published_at')
+    serializer_class = video_serializers.VideoSerializer
     pagination_class = common_pagination.CustomPagination
 
 
@@ -18,17 +18,17 @@ class VideoSearchView(rest_generics.ListAPIView):
     """
     API to search videos
     """
-    queryset = search_models.Video.objects.order_by('-published_at')
-    serializer_class = search_serializers.VideoSerializer
+    queryset = video_models.Video.objects.order_by('-published_at')
+    serializer_class = video_serializers.VideoSerializer
     pagination_class = common_pagination.CustomPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        query = self.request.GET.get('query', None)
+        query = self.request.query_params.get('query', None)
         
         # Building multiple filters with Q objects for ordering queryset, decresing order of priority
-        title__exact_match_queryset = Q(title=query) if query else Q()  # Exact title match
-        description__exact_match_queryset = Q(description=query) if query else Q()  # Exact description match
+        title__exact_match_queryset = Q(title__iexact=query) if query else Q()  # Exact case insenstive title match
+        description__exact_match_queryset = Q(description__iexact=query) if query else Q()  # Exact case insenstive  description match
         
         title_conatins_queryset = Q()   # Title contains query
         description_contains_queryset = Q()   # Description contains query
@@ -40,6 +40,7 @@ class VideoSearchView(rest_generics.ListAPIView):
 
 
         # Annotating queryset with search_type_ordering field to order queryset based on search type
+        # This method would actually save us from picking same instance multiple times with preserving an order
         # search_type_ordering field is based on following priority:
         # 1. Exact title match with value 4
         # 2. Exact description match with value 3
@@ -62,3 +63,10 @@ class VideoSearchView(rest_generics.ListAPIView):
         ).order_by('-search_type_ordering', '-published_at')
 
         return queryset
+
+
+class APIKeyView(rest_generics.CreateAPIView):
+    """
+    API to create API key
+    """
+    serializer_class = video_serializers.APIKeySerializer

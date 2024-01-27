@@ -7,7 +7,7 @@ class Video(common_models.DatesTimeModel):
     """
     Stores video data from YouTube API
     """
-    video_id = models.CharField(max_length=100)
+    video_id = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=5000)
     published_at = models.DateTimeField()
@@ -22,7 +22,7 @@ class APIKey(common_models.DatesTimeModel):
     Stores API Key for YouTube API 
     """
 
-    key = models.CharField(max_length=100)
+    key = models.CharField(max_length=100, unique=True)
     next_available_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

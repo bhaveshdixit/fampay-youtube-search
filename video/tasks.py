@@ -3,7 +3,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from datetime import datetime
 
-from search import (models as search_models, utils as search_utils)
+from video import (models as video_models, utils as video_utils)
 
 logger = get_task_logger(__name__)
 
@@ -14,7 +14,7 @@ def fetch_latest_video_from_youtube():
     Our task to fetch latest videos from YouTube API and store them in our database
     """
 
-    current_latest_video = search_models.Video.objects.order_by('-published_at').first()
+    current_latest_video = video_models.Video.objects.order_by('-published_at').first()
     current_latest_video_published_at = None
 
     if current_latest_video:
@@ -24,15 +24,15 @@ def fetch_latest_video_from_youtube():
         current_latest_video_published_at = datetime(2000, 1, 1)
     
     try:    
-        latest_videos = search_utils.get_videos_from_youtube(current_latest_video_published_at)
+        latest_videos = video_utils.get_videos_from_youtube(current_latest_video_published_at)
     except Exception as e:
         logger.error(e)
         return
 
-    video_objects = [search_models.Video(**video) for video in latest_videos]
+    video_objects = [video_models.Video(**video) for video in latest_videos]
 
     # We will be using bulk_create to create multiple objects in a single query
-    search_models.Video.objects.bulk_create(video_objects)
+    video_models.Video.objects.bulk_create(video_objects)
 
     return 'Success'
 

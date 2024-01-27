@@ -4,13 +4,13 @@ from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 
-from search import models as search_models
+from video import (models as video_models, constants as video_constants)
 
 def get_active_api_keys():
     """
     Utility to fetch active API keys from database
     """
-    return search_models.APIKey.objects.filter(next_available_on__lte=timezone.now())
+    return video_models.APIKey.objects.filter(next_available_on__lte=timezone.now())
 
 def get_params(key, publishedAfter):
     """
@@ -21,7 +21,7 @@ def get_params(key, publishedAfter):
         'q': settings.SEARCH_KEY,
         'type': 'video',
         'key': key,
-        'maxResults': 5,
+        'maxResults': 100,
         'publishedAfter': publishedAfter.strftime("%Y-%m-%dT%H:%M:%SZ"), # format: 2021-09-25T00:00:00Z RFC 3339 
     }
 
@@ -30,7 +30,8 @@ def get_videos_from_youtube(publishedAfter):
     Utility to fetch videos from YouTube API given a publishedAfter date
     """
     
-    url = 'https://www.googleapis.com/youtube/v3/search'
+    url = f'{video_constants.YOUTUBE_API_BASE_URL}/search'
+    
     response = None
     active_keys = get_active_api_keys()
 
@@ -56,7 +57,7 @@ def get_videos_from_youtube(publishedAfter):
             'title': item['snippet']['title'],
             'description': item['snippet']['description'],
             'published_at': item['snippet']['publishedAt'],
-            'thumbnail': item['snippet']['thumbnails']['default']['url'],
+            'thumbnail_url': item['snippet']['thumbnails']['default']['url'],
         } for item in items
     ]
 

@@ -13,6 +13,7 @@ django-celery-beat = "*"
 djangorestframework = "*"
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.7"

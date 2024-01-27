@@ -79,7 +79,7 @@ $ python manage.py createsuperuser
 ```
 $ python manage.py runserver
 ``` 
-Open <a href="http://127.0.0.1:8000/admin">Django admin</a> and add a new periodic task with desired name and Task (registered) to be selected is fetch_latest_video
+Open <a href="http://127.0.0.1:8000/admin" target="_blank">Django admin</a> and add a new periodic task with desired name and select fetch_latest_video in Task (registered) dropdown, and add Interval Schedule of your choice. Below is reference:
 
 ![Alt text](/static/periodic_task_reference.png)
 

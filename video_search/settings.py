@@ -33,8 +33,7 @@ DEBUG = env("DEBUG")
 
 # Our search key, for which we are storing videos from YouTube API
 SEARCH_KEY = 'cricket'
-
-SEARCH_API_KEY = env('SEARCH_API_KEY')
+MAX_RESULTS_IN_SINGLE_FETCH = 50 # Max results in single fetch from YouTube API, allowed range is (0, 50]
 
 ALLOWED_HOSTS = []
 

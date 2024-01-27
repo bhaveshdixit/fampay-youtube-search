@@ -21,7 +21,7 @@ def get_params(key, publishedAfter):
         'q': settings.SEARCH_KEY,
         'type': 'video',
         'key': key,
-        'maxResults': 100,
+        'maxResults': settings.MAX_RESULTS_IN_SINGLE_FETCH,
         'publishedAfter': publishedAfter.strftime("%Y-%m-%dT%H:%M:%SZ"), # format: 2021-09-25T00:00:00Z RFC 3339 
     }
 
@@ -31,7 +31,7 @@ def get_videos_from_youtube(publishedAfter):
     """
     
     url = f'{video_constants.YOUTUBE_API_BASE_URL}/search'
-    
+
     response = None
     active_keys = get_active_api_keys()
 

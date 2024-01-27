@@ -7,7 +7,7 @@ class Video(common_models.DatesTimeModel):
     """
     Stores video data from YouTube API
     """
-    video_id = models.CharField(max_length=100, unique=True)
+    video_id = models.CharField(max_length=100)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=5000)
     published_at = models.DateTimeField()
@@ -15,13 +15,13 @@ class Video(common_models.DatesTimeModel):
 
     class Meta:
         indexes = [
-            models.Index(fields=['title', 'description']),
-            models.Index(fields=['title']),
-            models.Index(fields=['description']),
+            models.Index(fields=['title', 'description'], name='title_description_idx'),
+            models.Index(fields=['title'], name='title_idx'),
+            models.Index(fields=['description'], name='description_idx'),
         ]
 
     def __str__(self) -> str:
-        return '{}  -  {}'.format(self.title, self.published_at.strftime('%d-%m-%Y %H:%M:%S'))
+        return self.title
     
 
 class APIKey(common_models.DatesTimeModel):

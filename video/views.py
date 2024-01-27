@@ -9,7 +9,7 @@ class VideoListView(rest_generics.ListAPIView):
     """
     API to list videos
     """
-    queryset = video_models.Video.objects.order_by('-published_at')
+    queryset = video_models.Video.objects.order_by('-published_at', '-id')
     serializer_class = video_serializers.VideoSerializer
     pagination_class = common_pagination.CustomPagination
 
@@ -60,7 +60,7 @@ class VideoSearchView(rest_generics.ListAPIView):
                 default=Value(0),
                 output_field=IntegerField(),
             )
-        ).order_by('-search_type_ordering', '-published_at')
+        ).order_by('-search_type_ordering', '-published_at', '-id')
 
         return queryset
 

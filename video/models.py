@@ -11,7 +11,14 @@ class Video(common_models.DatesTimeModel):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=5000)
     published_at = models.DateTimeField()
-    thumbnail_url = models.CharField(max_length=100)
+    thumbnail_url = models.URLField(max_length=100)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['title', 'description']),
+            models.Index(fields=['title']),
+            models.Index(fields=['description']),
+        ]
 
     def __str__(self) -> str:
         return '{}  -  {}'.format(self.title, self.published_at.strftime('%d-%m-%Y %H:%M:%S'))

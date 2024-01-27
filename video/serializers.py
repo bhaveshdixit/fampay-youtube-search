@@ -9,6 +9,7 @@ class VideoSerializer(rest_serializers.ModelSerializer):
     """
     created_at = rest_serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     updated_at = rest_serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    published_at = rest_serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = video_models.Video

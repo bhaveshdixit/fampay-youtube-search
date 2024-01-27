@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from search import models as search_models
+
+admin.site.register(search_models.Video)

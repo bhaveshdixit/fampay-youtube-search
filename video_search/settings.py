@@ -31,6 +31,11 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
+# Our search key, for which we are storing videos from YouTube API
+SEARCH_KEY = 'cricket'
+
+SEARCH_API_KEY = env('SEARCH_API_KEY')
+
 ALLOWED_HOSTS = []
 
 
@@ -43,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
+    'search',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +88,12 @@ WSGI_APPLICATION = 'video_search.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env("DB_NAME"), 
+        'USER': env("DB_USERNAME"), 
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': 'localhost', 
+        'PORT': '5432',
     }
 }
 
@@ -127,3 +138,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery Configurations
+
+CELERY_BROKER_URL = 'redis://localhost:6379'  
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'  
+CELERY_ACCEPT_CONTENT = ['application/json']  
+CELERY_TASK_SERIALIZER = 'json'  
+CELERY_RESULT_SERIALIZER = 'json' 

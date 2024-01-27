@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 django-environ = "*"
 django = "*"
+psycopg2 = "*"
+celery = {extras = ["redis"], version = "*"}
+requests = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 

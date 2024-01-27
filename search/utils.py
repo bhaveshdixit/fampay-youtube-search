@@ -1,7 +1,8 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.conf import settings
+from django.utils import timezone
 
 from search import models as search_models
 
@@ -9,7 +10,7 @@ def get_active_api_keys():
     """
     Utility to fetch active API keys from database
     """
-    return search_models.APIKey.objects.filter(next_available_on__lte=datetime.now())
+    return search_models.APIKey.objects.filter(next_available_on__lte=timezone.now())
 
 def get_params(key, publishedAfter):
     """
@@ -39,7 +40,7 @@ def get_videos_from_youtube(publishedAfter):
         if response and response.ok:
             break
         else:
-            key.next_available_on = datetime.now() + timedelta(days=1)
+            key.next_available_on = timezone.now() + timedelta(days=1)
             key.save()
 
     
@@ -47,15 +48,8 @@ def get_videos_from_youtube(publishedAfter):
         # If all keys are exhausted, we will return empty list
         raise Exception('No active API keys found')
 
-    # for key in get_active_api_keys():
-    #     params = get_params(key.key, publishedAfter)
-    #     response = requests.get(url, params=params)
-    #     if response.status_code == 200:
-    #         break
-    # print("🐍 File: search/utils.py | Line: 19 | get_videos_from_youtube ~ publishedAfter.isoformat()+Z",publishedAfter.isoformat()+"Z")
-
-    print("🐍 File: search/utils.py | Line: 22 | get_videos_from_youtube ~ response.json()",response.json())
     items = response.json()['items']
+
     return [
         {
             'video_id': item['id']['videoId'],

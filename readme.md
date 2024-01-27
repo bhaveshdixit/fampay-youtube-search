@@ -76,7 +76,9 @@ $ python manage.py migrate
 ```
 $ python manage.py createsuperuser
 ``` 
-
+```
+$ python manage.py runserver
+``` 
 Open <a href="http://127.0.0.1:8000/admin">Django admin</a> and add a new periodic task with desired name and Task (registered) to be selected is fetch_latest_video
 
 ![Alt text](/static/periodic_task_reference.png)

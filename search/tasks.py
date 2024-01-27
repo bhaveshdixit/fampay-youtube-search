@@ -22,16 +22,19 @@ def fetch_latest_video_from_youtube():
     else:
         # We will be using a fallback value if no videos are stored in our database
         current_latest_video_published_at = datetime(2000, 1, 1)
-        
     
-    print("🐍 File: search/tasks.py | Line: 21 | fetch_latest_video_from_youtube ~ current_latest_video_published_at",current_latest_video_published_at)
-        
-    latest_videos = search_utils.get_videos_from_youtube(current_latest_video_published_at)
-    print("🐍 File: search/tasks.py | Line: 30 | fetch_latest_video_from_youtube ~ latest_videos",latest_videos)
+    try:    
+        latest_videos = search_utils.get_videos_from_youtube(current_latest_video_published_at)
+    except Exception as e:
+        logger.error(e)
+        return
+
     video_objects = [search_models.Video(**video) for video in latest_videos]
 
     # We will be using bulk_create to create multiple objects in a single query
     search_models.Video.objects.bulk_create(video_objects)
+
+    return 'Success'
 
 
     

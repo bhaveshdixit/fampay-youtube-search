@@ -2,8 +2,6 @@
 
 An app that fetchs latest videos sorted in reverse chronological order of their publishing date-time from YouTube for a given tag/search query in a paginated response.
 
-#### <a href="https://drive.google.com/file/d/1hypSTZQY0bPol01-hxB3MLjw-1G4OKAT/view?usp=sharing" target="_blank"> Demo Video </a>
-
 ## Frameworks/Libraries
 
 1. Django + Django Rest Framework(DRF)
